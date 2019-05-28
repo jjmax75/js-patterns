@@ -22,7 +22,7 @@ console.log(civic.toString());
 console.log(mondeo.toString());
 console.log("no privacy:", civic.model);
 
-// basic es5 constructor pattern
+// prototypal es5 constructor pattern
 console.log("\n*******ES5 prototypal constructor pattern*******");
 function CarPrototypeConstructor(model, year, miles) {
 	this.model = model;
