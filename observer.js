@@ -6,7 +6,7 @@ function ObserverList() {
 }
 
 ObserverList.prototype.add = function(obj) {
-  return this.observerList.push(obj);
+  this.observerList.push(obj);
 };
 
 ObserverList.prototype.count = function() {
@@ -14,7 +14,7 @@ ObserverList.prototype.count = function() {
 };
 
 ObserverList.prototype.get = function(index) {
-  if (index >= 0 && index < this.count) {
+  if (index >= 0 && index < this.observerList.length) {
     return this.observerList[index];
   }
 };
@@ -23,7 +23,7 @@ ObserverList.prototype.indexOf = function(obj, startIndex = 0) {
   return this.observerList.indexOf(obj, startIndex);
 };
 
-ObserverList.prototype.removeAt = function(index) {´
+ObserverList.prototype.removeAt = function(index) {
   this.observerList.splice(index, 1);
 };
 
@@ -42,7 +42,6 @@ Subject.prototype.removeObserver = function(observer) {
 
 Subject.prototype.notify = function(context) {
   const observerCount = this.observers.count();
-
   for (let i = 0; i < observerCount; i++) {
     this.observers.get(i).update(context);
   }
@@ -50,9 +49,32 @@ Subject.prototype.notify = function(context) {
 
 // Observer
 function Observer() {
+  this.count = 0;
+  this.say = (id) => console.log(`Observer${id} count is: ${this.count}`);
   this.update = function() {
     // to be overwritten by each observers intended update method
     // ...
   }
 }
+
+
+// Test
+const MySubject = new Subject();
+const MyObserver1 = new Observer();
+MyObserver1.update = function(value) {
+  this.count += value;
+}
+const MyObserver2 = new Observer();
+MyObserver2.update = function(value) {
+  this.count += value;
+}
+MySubject.addObserver(MyObserver1);
+MySubject.addObserver(MyObserver2);
+MySubject.notify(2);
+MyObserver1.say(1); // 2
+MyObserver2.say(2); // 2
+MySubject.removeObserver(MyObserver2);
+MySubject.notify(2);
+MyObserver1.say(1); // 4
+MyObserver2.say(2); // 2
 
